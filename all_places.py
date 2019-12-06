@@ -88,3 +88,5 @@ acs_5yr_geographies = {'033': ('county','King','co'),
                        '42660': ('metropolitan statistical area/micropolitan statistical area','Seattle-Tacoma-Bellevue','msa'),
                        '14740': ('metropolitan statistical area/micropolitan statistical area','Bremerton-Silverdale','msa')
                        }
+					   
+					   
