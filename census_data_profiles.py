@@ -12,18 +12,14 @@ from census_profile_notes import *
 working_directory = os.getcwd()
 start_of_production = time.time()
 
+output_directory = os.path.join(working_directory,'output')
+
+# Create the output directory for the trip generation results
+if not os.path.exists(output_directory):
+    os.makedirs(output_directory)
+
 # This option will supress the warning message on possbile copy issues - confirmed it is working as desired so turning it off
 pd.set_option('chained_assignment',None)
-
-########################################################################################################################
-# These items will come from the batch input but for testing coded here now 
-########################################################################################################################  
-#acs_data_type = '1yr'
-#year = 2018
-#geography_lookup = {'033': ('county','King','co')}
-#geography_lookup = {'53': ('state','Washington','st')}
-#geography_lookup = {'42660': ('metropolitan statistical area/micropolitan statistical area','Seattle-Tacoma-Bellevue','msa')}
-#api_key = '6d9263105b3ca3213e093323b4ece211ab49d4e5'
 
 # Get the lookup passed from the system argument
 acs_data_type = sys.argv[1]
