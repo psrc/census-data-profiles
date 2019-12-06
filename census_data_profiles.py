@@ -12,6 +12,9 @@ from census_profile_notes import *
 working_directory = os.getcwd()
 start_of_production = time.time()
 
+# This option will supress the warning message on possbile copy issues - confirmed it is working as desired so turning it off
+pd.set_option('chained_assignment',None)
+
 ########################################################################################################################
 # These items will come from the batch input but for testing coded here now 
 ########################################################################################################################  
@@ -118,7 +121,11 @@ heading5_format = current_workbook.add_format({'bold': False,
 
 heading6_format = current_workbook.add_format({'bold': False,
                                                'text_wrap': True,
-                                               'indent': 5})     
+                                               'indent': 5})
+
+heading7_format = current_workbook.add_format({'bold': False,
+                                               'text_wrap': True,
+                                               'indent': 5})       
 notes_sheet.set_column('A:A', 120)
 
 ##################################################################################################
@@ -297,6 +304,9 @@ for tables in data_tables:
     # Read in each row and format based on the contents of the level field
     for index, row in final_df.iterrows():
         # Formats for the Title Column
+        if row['Level'] == 'Heading0':
+            current_worksheet.write(index+1, 0, row['Subject'], heading1_format)
+            
         if row['Level'] == 'Heading1':
             current_worksheet.write(index+1, 0, row['Subject'], heading1_format)
             
@@ -311,6 +321,12 @@ for tables in data_tables:
 
         if row['Level'] == 'Heading5':
             current_worksheet.write(index+1, 0, row['Subject'], heading5_format)
+        
+        if row['Level'] == 'Heading6':
+            current_worksheet.write(index+1, 0, row['Subject'], heading6_format)
+            
+        if row['Level'] == 'Heading7':
+            current_worksheet.write(index+1, 0, row['Subject'], heading7_format)
                 
         census_values = [['Estimate',1,data_format],['Margin of Error',2,data_format],['Percent',3,percentage_format],['Percent Margin of Error',4,percentage_format]]
             

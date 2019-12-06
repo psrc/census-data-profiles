@@ -1,7 +1,9 @@
 /Data
 /inputs
 /output
+/__pycache__
 *.xlsx
 *.png
 *.pptx
 *.html
+
