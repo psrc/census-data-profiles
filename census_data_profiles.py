@@ -27,12 +27,20 @@ year = sys.argv[2]
 api_key = sys.argv[3]
 geography_lookup = ast.literal_eval(sys.argv[4])
 
+end_5yr = int(year) - 2000
+start_5yr = end_5yr - 4 
+
+download_date = dt.datetime.today().strftime('%Y-%m-%d')
+psrc_geographies = ','.join(geography_lookup.keys())
+
 if acs_data_type == '1yr' :
     data_set = 'acs/acs1/profile'
+    out_file = 'acsprof'+str(end_5yr)+'-'+str.lower(geography_lookup[psrc_geographies][2])+'-'+ str.lower(geography_lookup[psrc_geographies][1]) +'.xlsx'
     
 elif acs_data_type == '5yr' :
     data_set = 'acs/acs5/profile'
-    
+    out_file = 'acsprof'+str(start_5yr)+'-'+str(end_5yr)+'-'+str.lower(geography_lookup[psrc_geographies][2])+'-'+ str.lower(geography_lookup[psrc_geographies][1]) +'.xlsx'
+        
 ########################################################################################################################
 ########################################################################################################################
 
@@ -48,15 +56,12 @@ data_tables = [['DP02','SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES'],
                ['DP04','SELECTED HOUSING CHARACTERISTICS'],
                ['DP05','ACS DEMOGRAPHIC AND HOUSING ESTIMATES']]
 
-download_date = dt.datetime.today().strftime('%Y-%m-%d')
-psrc_geographies = ','.join(geography_lookup.keys())
-
 ##################################################################################################
 ##################################################################################################    
 # Create an Excel object to add the tables as worksheets into - one workbook for each geography
 ##################################################################################################
 ##################################################################################################  
-writer = pd.ExcelWriter(working_directory + '/output/acs-'+acs_data_type+'-profile-'+str(year)+'-'+geography_lookup[psrc_geographies][2]+'-'+ geography_lookup[psrc_geographies][1] +'.xlsx',engine='xlsxwriter')
+writer = pd.ExcelWriter(working_directory + '/output/'+out_file,engine='xlsxwriter')
 current_workbook  = writer.book
 notes_sheet = current_workbook.add_worksheet('Notes')
 

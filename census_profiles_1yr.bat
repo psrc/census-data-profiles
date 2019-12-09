@@ -19,6 +19,8 @@ python census_data_profiles.py 1yr 2018 <enter api key> "{'23515': ('place','Fed
 python census_data_profiles.py 1yr 2018 <enter api key> "{'35415': ('place','Kent','pl')}"
 python census_data_profiles.py 1yr 2018 <enter api key> "{'35940': ('place','Kirkland','pl')}"
 python census_data_profiles.py 1yr 2018 <enter api key> "{'43955': ('place','Marysville','pl')}"
+python census_data_profiles.py 1yr 2018 <enter api key> "{'57535': ('place','Redmond','pl')}"
 python census_data_profiles.py 1yr 2018 <enter api key> "{'57745': ('place','Renton','pl')}"
+python census_data_profiles.py 1yr 2018 <enter api key> "{'61115': ('place','Sammamish','pl')}"
 python census_data_profiles.py 1yr 2018 <enter api key> "{'63000': ('place','Seattle','pl')}"
 python census_data_profiles.py 1yr 2018 <enter api key> "{'70000': ('place','Tacoma','pl')}"
