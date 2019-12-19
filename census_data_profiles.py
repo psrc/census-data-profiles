@@ -95,11 +95,15 @@ title_format = current_workbook.add_format({'bold': True,
 data_format = current_workbook.add_format({'num_format': '#,##0',
                                            'align': 'center',
                                            'bold': False})
-
+    
 percentage_format = current_workbook.add_format({'num_format': '0.0',
                                                  'align': 'center',
                                                  'bold': False})
 
+float_format = current_workbook.add_format({'num_format': '0.00',
+                                                 'align': 'center',
+                                                 'bold': False})    
+    
 heading1_format = current_workbook.add_format({'bold': True,
                                                'text_wrap': True,
                                                'align': 'justify'})    
@@ -284,11 +288,21 @@ for tables in data_tables:
     final_df = final_df.sort_values('var')
     final_df = final_df.reset_index()
 
-    final_columns = ['Subject','Estimate','Margin of Error','Percent','Percent Margin of Error','Level']
-    final_df = final_df[final_columns]
-    
     for my_columns in numeric_columns:
-        final_df[my_columns] = final_df[my_columns].apply(float)
+        final_df[my_columns] = final_df[my_columns].apply(float)    
+        
+    final_df['Estimate Format'] = 'integer'
+    final_df['int_est'] = final_df['Estimate'].apply(int)    
+    final_df['decimals'] = final_df['Estimate']-final_df['int_est']
+    final_df.loc[final_df['decimals'] > 0, 'Estimate Format'] = 'float'
+
+    final_df['MOE Format'] = 'integer'
+    final_df['int_moe'] = final_df['Margin of Error'].apply(int)    
+    final_df['decimals'] = final_df['Margin of Error']-final_df['int_moe']
+    final_df.loc[final_df['decimals'] > 0, 'MOE Format'] = 'float'
+   
+    final_columns = ['Subject','Estimate','Margin of Error','Percent','Percent Margin of Error','Level','Estimate Format','MOE Format']
+    final_df = final_df[final_columns]  
 
     ##################################################################################################
     ##################################################################################################
@@ -328,9 +342,19 @@ for tables in data_tables:
             
         if row['Level'] == 'Heading7':
             current_worksheet.write(index+1, 0, row['Subject'], heading7_format)
-                
-        census_values = [['Estimate',1,data_format],['Margin of Error',2,data_format],['Percent',3,percentage_format],['Percent Margin of Error',4,percentage_format]]
             
+        if row['Estimate Format'] == 'float' and row['MOE Format'] == 'float':
+            census_values = [['Estimate',1,float_format],['Margin of Error',2,float_format],['Percent',3,percentage_format],['Percent Margin of Error',4,percentage_format]]
+                
+        if row['Estimate Format'] == 'integer' and row['MOE Format'] == 'float':
+            census_values = [['Estimate',1,data_format],['Margin of Error',2,float_format],['Percent',3,percentage_format],['Percent Margin of Error',4,percentage_format]]
+
+        if row['Estimate Format'] == 'integer' and row['MOE Format'] == 'integer':
+            census_values = [['Estimate',1,data_format],['Margin of Error',2,data_format],['Percent',3,percentage_format],['Percent Margin of Error',4,percentage_format]]
+
+        if row['Estimate Format'] == 'float' and row['MOE Format'] == 'integer':
+            census_values = [['Estimate',1,float_format],['Margin of Error',2,data_format],['Percent',3,percentage_format],['Percent Margin of Error',4,percentage_format]]
+    
         for results in census_values:
             
             # Tests to replace error numbers with the error code
