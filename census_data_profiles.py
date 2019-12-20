@@ -380,6 +380,15 @@ for tables in data_tables:
             if row[results[0]] == -555555555:
                 current_worksheet.write(index+heading_offset, results[1], '*****' , results[2])
 
+            elif row[results[0]] == -666666666:
+                current_worksheet.write(index+heading_offset, results[1], '-' , results[2]) 
+
+            elif row[results[0]] == -333333333:
+                current_worksheet.write(index+heading_offset, results[1], '***' , results[2]) 
+
+            elif row[results[0]] == -222222222:
+                current_worksheet.write(index+heading_offset, results[1], '**' , results[2]) 
+
             elif row[results[0]] == -888888896:
                 current_worksheet.write(index+heading_offset, results[1], '*****' , results[2]) 
 
