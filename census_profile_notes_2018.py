@@ -16,7 +16,7 @@ symbol_notes = ['Explanation of Symbols:',
 
 # Notes generic to all profiles			
 all_profile_notes = ['Notes applicable to all Census Data Profiles:',
-					 'Source: U.S. Census Bureau, 2018 American Community Survey 5-Year Estimates',
+					 'Source: U.S. Census Bureau, 2018 American Community Survey Estimates',
 					 '',
                      'Although the American Community Survey (ACS) produces population, demographic and housing unit estimates, it is the Census Bureaus Population Estimates Program that produces and disseminates the official estimates of the population for the nation, states, counties, cities, and towns and estimates of housing units for states and counties.'
                      '',
