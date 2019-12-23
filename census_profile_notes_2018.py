@@ -1,6 +1,3 @@
-# Lists for formatting comments for Data Profiles from the Census API
-# Created by Puget Sound Regional Council Staff
-
 # Notes about symbols in the data
 symbol_notes = ['Explanation of Symbols:',
 				'1. An "**" entry in the margin of error column indicates that either no sample observations or too few sample observations were available to compute a standard error and thus the margin of error. A statistical test is not appropriate.',
@@ -16,9 +13,7 @@ symbol_notes = ['Explanation of Symbols:',
 
 # Notes generic to all profiles			
 all_profile_notes = ['Notes applicable to all Census Data Profiles:',
-					 'Source: U.S. Census Bureau, 2018 American Community Survey Estimates',
-					 '',
-                     'Although the American Community Survey (ACS) produces population, demographic and housing unit estimates, it is the Census Bureaus Population Estimates Program that produces and disseminates the official estimates of the population for the nation, states, counties, cities, and towns and estimates of housing units for states and counties.'
+                     'Although the American Community Survey (ACS) produces population, demographic and housing unit estimates, it is the Census Bureaus Population Estimates Program that produces and disseminates the official estimates of the population for the nation, states, counties, cities, and towns and estimates of housing units for states and counties.',
                      '',
                      'Data are based on a sample and are subject to sampling variability. The degree of uncertainty for an estimate arising from sampling variability is represented through the use of a margin of error. The value shown here is the 90 percent margin of error. '+
                      'The margin of error can be interpreted roughly as providing a 90 percent probability that the interval defined by the estimate minus the margin of error and the estimate plus the margin of error (the lower and upper confidence bounds) contains the true value. In addition to '+
@@ -35,8 +30,6 @@ all_profile_notes = ['Notes applicable to all Census Data Profiles:',
 
 # Notes specific to Data Profile 2	
 dp02_notes = ['Notes for DP02: SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES',
-              'The effect of nonsampling error is not represented in these tables.', 
-              '',
               'Ancestry listed in this table refers to the total number of people who responded with a particular ancestry; for example, the '+
               'estimate given for Russian represents the number of people who listed Russian as either their first or second ancestry. This table lists only '+
               'the largest ancestry groups; see the Detailed Tables for more categories. Race and Hispanic origin groups are not included in this table because '+

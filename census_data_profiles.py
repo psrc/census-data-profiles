@@ -7,8 +7,6 @@ import sys
 import ast
 import os     
 
-from census_profile_notes import *
-
 working_directory = os.getcwd()
 start_of_production = time.time()
 
@@ -36,11 +34,38 @@ psrc_geographies = ','.join(geography_lookup.keys())
 if acs_data_type == '1yr' :
     data_set = 'acs/acs1/profile'
     out_file = 'acsprof'+str(end_5yr)+'-'+str.lower(geography_lookup[psrc_geographies][2])+'-'+ str.lower(geography_lookup[psrc_geographies][1]) +'.xlsx'
+    source_note = 'Source: U.S. Census Bureau, '+str(year)+' American Community Survey 1-Year Estimates'
     
 elif acs_data_type == '5yr' :
     data_set = 'acs/acs5/profile'
     out_file = 'acsprof'+str(start_5yr)+'-'+str(end_5yr)+'-'+str.lower(geography_lookup[psrc_geographies][2])+'-'+ str.lower(geography_lookup[psrc_geographies][1]) +'.xlsx'
-        
+    source_note = 'Source: U.S. Census Bureau, 20'+str(start_5yr)+'-20'+str(end_5yr)+' 5-Year American Community Survey Estimates'
+    
+# Choose the Notes Sheet to use based on year of data
+if year == '2011':
+    from census_profile_notes_2011 import *
+
+elif year == '2012':
+    from census_profile_notes_2012 import *
+
+elif year == '2013':
+    from census_profile_notes_2013 import *
+
+elif year == '2014':
+    from census_profile_notes_2014 import *
+
+elif year == '2015':
+    from census_profile_notes_2015 import *
+
+elif year == '2016':
+    from census_profile_notes_2016 import *    
+
+elif year == '2017':
+    from census_profile_notes_2017 import *   
+    
+elif year == '2018':
+    from census_profile_notes_2018 import *    
+    
 ########################################################################################################################
 ########################################################################################################################
 
@@ -173,6 +198,9 @@ for notes in all_profile_notes:
     current_note += 1
     notes_row += 1
     
+# Add in Note about Data Source    
+notes_sheet.write_string(notes_row, 0, source_note, note_format) 
+notes_row += 1
 
 current_note = 0
 for notes in dp02_notes:     
