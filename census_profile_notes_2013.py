@@ -12,7 +12,7 @@ symbol_notes = ['Explanation of Symbols:',
 
 # Notes generic to all profiles			
 all_profile_notes = ['Notes applicable to all Census Data Profiles:',
-                     'Although the American Community Survey (ACS) produces population, demographic and housing unit estimates, it is the Census Bureaus Population Estimates Program that produces and disseminates the official estimates of the population for the nation, states, counties, cities, and towns and estimates of housing units for states and counties.'+
+                     'Although the American Community Survey (ACS) produces population, demographic and housing unit estimates, it is the Census Bureaus Population Estimates Program that produces and disseminates the official estimates of the population for the nation, states, counties, cities, and towns and estimates of housing units for states and counties.',
                      '',
                      'Data are based on a sample and are subject to sampling variability. The degree of uncertainty for an estimate arising from sampling variability is represented through the use of a margin of error. The value shown here is the 90 percent margin of error. '+
                      'The margin of error can be interpreted roughly as providing a 90 percent probability that the interval defined by the estimate minus the margin of error and the estimate plus the margin of error (the lower and upper confidence bounds) contains the true value. In addition to '+

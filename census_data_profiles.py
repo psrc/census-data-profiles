@@ -201,6 +201,8 @@ for notes in all_profile_notes:
 # Add in Note about Data Source    
 notes_sheet.write_string(notes_row, 0, source_note, note_format) 
 notes_row += 1
+notes_sheet.write_string(notes_row, 0, '', note_format)
+notes_row += 1
 
 current_note = 0
 for notes in dp02_notes:     
