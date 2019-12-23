@@ -308,6 +308,10 @@ for tables in data_tables:
             interim  = interim.rename(columns={'value':value})
             final_df = pd.merge(final_df,interim,on='var',suffixes=('_x','_y'),how='left')
 
+    print('Removing any Duplicate Records from the Dataframe')
+    final_df.drop_duplicates(keep = 'first', inplace = True)
+    final_df = final_df.reset_index()
+
     print('Adding a field for the heading level of the variable')
     final_df['Level'] = 0
     final_df['Subject'] = ''
