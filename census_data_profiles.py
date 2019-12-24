@@ -28,6 +28,9 @@ geography_lookup = ast.literal_eval(sys.argv[4])
 end_5yr = int(year) - 2000
 start_5yr = end_5yr - 4 
 
+if start_5yr < 10:
+    start_5yr = '0'+str(start_5yr)
+
 download_date = dt.datetime.today().strftime('%Y-%m-%d')
 psrc_geographies = ','.join(geography_lookup.keys())
 
