@@ -5,13 +5,17 @@ import time
 import datetime as dt
 import sys
 import os
-import geopandas as gp     
+import geopandas as gp
+import zipfile
+import getpass 
+import shutil
+import glob    
 
-working_directory = os.getcwd()
 start_of_production = time.time()
 
+working_directory = os.getcwd()
 output_directory = os.path.join(working_directory,'output')
-shapefile_directory = 'c://shapefiles//census'
+temp_path = os.path.join('c:\\Users',getpass.getuser(),'Downloads')
 
 # Create the output directory for the trip generation results
 if not os.path.exists(output_directory):
@@ -25,8 +29,22 @@ acs_data_type = sys.argv[1]
 year = sys.argv[2]
 api_key = sys.argv[3]
 
-place_shapefile = os.path.join(shapefile_directory,'tl_'+str(year)+'_53_place.shp')
-county_shapefile = os.path.join(shapefile_directory,'counties_wa.shp')
+place_zip = temp_path + '\\tl_'+str(year)+'_53_place.zip'
+place_url = 'https://www2.census.gov/geo/tiger/TIGER'+str(year)+'/PLACE/tl_'+str(year)+'_53_place.zip'
+
+county_zip = temp_path + '\\tl_'+str(year)+'_us_county.zip'
+county_url = 'https://www2.census.gov/geo/tiger/TIGER'+str(year)+'/COUNTY/tl_'+str(year)+'_us_county.zip'
+
+def download_census_shapes(working_url,working_zip):
+    
+    with urllib.request.urlopen(working_url) as response, open(working_zip, 'wb') as out_file:
+        shutil.copyfileobj(response, out_file)
+
+    # Uncompress the Shapefile for use in the analysis and remove the zipfile
+    working_archive = zipfile.ZipFile(working_zip, 'r')
+    working_archive.extractall(temp_path)
+    working_archive.close()
+    os.remove(working_zip)
 
 def get_data_profile(current_call,place_type,current_table):
     
@@ -53,7 +71,13 @@ def spatial_join(target_shapefile,join_shapefile,keep_columns):
     # open join shapefile as a geodataframe
     join_layer = gp.GeoDataFrame.from_file(join_shapefile)
     target_layer = gp.GeoDataFrame.from_file(target_shapefile)
-
+    
+    # Create PSRC Flag in the Join Layer and trim down before joining
+    join_layer['PSRC'] = 0
+    join_layer.loc[(join_layer['GEOID'] == '53033')|(join_layer['GEOID'] == '53035')|(join_layer['GEOID'] == '53053')|(join_layer['GEOID'] == '53061'), 'PSRC'] = 1
+    cols_to_keep = ['geometry','PSRC']
+    join_layer = join_layer[cols_to_keep]
+    
     # spatial join
     merged = gp.sjoin(target_layer, join_layer, how = "inner", op='intersects')
     merged = pd.DataFrame(merged)
@@ -120,6 +144,24 @@ data_tables = [['DP02','SELECTED SOCIAL CHARACTERISTICS IN THE UNITED STATES'],
 
 ##################################################################################################
 ##################################################################################################    
+# Download the Census Shapefiles and create a lookup for places in Washington
+##################################################################################################
+################################################################################################## 
+print('Downloading the Census Place shapefile and uncompressing')
+download_census_shapes(place_url, place_zip)
+
+print('Downloading the Census County shapefile and uncompressing - this step can take awhile')
+download_census_shapes(county_url, county_zip)
+
+place_shapefile = os.path.join(temp_path,'tl_'+str(year)+'_53_place.shp')
+county_shapefile = os.path.join(temp_path,'tl_'+str(year)+'_us_county.shp')
+
+print('Creating a lookup of Place GEOIDs and a PSRC Flag')
+keep_columns = ['GEOID','PSRC']
+places = spatial_join(place_shapefile, county_shapefile, keep_columns)
+
+##################################################################################################
+##################################################################################################    
 # Download the List of all Variables with labels and only save those for Data Profiles
 ##################################################################################################
 ################################################################################################## 
@@ -136,15 +178,6 @@ labels_df = labels_df.drop('concept',axis=1)
 labels_df = labels_df[~labels_df['variable'].str.contains('PE')]
 labels_df = labels_df[labels_df['variable'].str.contains('DP')]
 labels_df = labels_df[~labels_df['variable'].str.contains('PR')]
-
-##################################################################################################
-##################################################################################################    
-# Create a lookup for Places in Washington to filter down the results
-##################################################################################################
-################################################################################################## 
-print('Creating a lookup of Place GEOIDs and a PSRC Flag')
-keep_columns = ['GEOID','PSRC']
-places = spatial_join(place_shapefile, county_shapefile, keep_columns)
 
 ##################################################################################################
 ##################################################################################################    
@@ -191,7 +224,6 @@ all_profiles['NAME'] = all_profiles['NAME'].str.replace(', Washington','')
 all_profiles['NAME'] = all_profiles['NAME'].str.replace(' city','')
 all_profiles['NAME'] = all_profiles['NAME'].str.replace(' town','')
 all_profiles['NAME'] = all_profiles['NAME'].str.replace(' County','')
-all_profiles['NAME'] = all_profiles['NAME'].str.replace(' CDP','')
 all_profiles['NAME'] = all_profiles['NAME'].str.replace(', WA Metro Area','')
 all_profiles = all_profiles.drop('GEO_ID',axis=1)
 all_profiles.columns = all_profiles.columns.str.lower()
@@ -563,6 +595,14 @@ for places in place_names:
         current_worksheet.merge_range('A1:B1','Subject', header_format)
   
     writer.save()
+
+# Remove temporary census place shapefiles
+for fl in glob.glob(temp_path + '\\tl_'+str(year)+'_53_place.*'):
+    os.remove(fl)
+    
+# Remove temporary census county shapefiles
+for fl in glob.glob(temp_path + '\\tl_'+str(year)+'_us_county.*'):
+    os.remove(fl)  
 
 end_of_production = time.time()
 print ('The Total Time for all processes took', (end_of_production-start_of_production)/60, 'minutes to execute.')
