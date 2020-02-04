@@ -248,10 +248,10 @@ for places in place_names:
     place_type = working_df.place_type.unique().tolist()
     
     if acs_data_type == '1yr' :
-        out_file = 'acsprof'+str(end_5yr)+'-'+str.lower(place_type[0])+'-'+ str.lower(places.replace(" ", "_")) +'.xlsx'
+        out_file = 'acsprof'+str(end_5yr)+'-'+str.lower(place_type[0])+'-'+ str.lower(places.replace(" ", "-")) +'.xlsx'
      
     elif acs_data_type == '5yr' :
-        out_file = 'acsprof'+str(start_5yr)+'-'+str(end_5yr)+'-'+str.lower(place_type[0])+'-'+ str.lower(places.replace(" ", "_")) +'.xlsx'
+        out_file = 'acsprof'+str(start_5yr)+'-'+str(end_5yr)+'-'+str.lower(place_type[0])+'-'+ str.lower(places.replace(" ", "-")) +'.xlsx'
  
     writer = pd.ExcelWriter(working_directory + '/output/'+out_file,engine='xlsxwriter')
     current_workbook  = writer.book
